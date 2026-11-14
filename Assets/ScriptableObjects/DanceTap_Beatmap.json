@@ -1,0 +1,144 @@
+{
+  "bpm": 120,
+  "offsetMs": 0,
+  "beatsPerBar": 4,
+  "lengthBeats": 64,
+  "sections": [
+    {
+      "name": "Tutorial",
+      "fromBeat": 0,
+      "toBeat": 16
+    },
+    {
+      "name": "Main",
+      "fromBeat": 16,
+      "toBeat": 36
+    },
+    {
+      "name": "SuperBuild",
+      "fromBeat": 36,
+      "toBeat": 44
+    },
+    {
+      "name": "SuperMove",
+      "fromBeat": 44,
+      "toBeat": 48
+    },
+    {
+      "name": "Victory",
+      "fromBeat": 48,
+      "toBeat": 56
+    },
+    {
+      "name": "Outro",
+      "fromBeat": 56,
+      "toBeat": 64
+    }
+  ],
+  "notes": [
+    {
+      "beat": 4,
+      "side": 0
+    },
+    {
+      "beat": 6,
+      "side": 1
+    },
+    {
+      "beat": 8,
+      "side": 0
+    },
+    {
+      "beat": 10,
+      "side": 1
+    },
+    {
+      "beat": 12,
+      "side": 0
+    },
+    {
+      "beat": 14,
+      "side": 1
+    },
+    {
+      "beat": 16,
+      "side": 0
+    },
+    {
+      "beat": 17,
+      "side": 1
+    },
+    {
+      "beat": 18,
+      "side": 0
+    },
+    {
+      "beat": 19,
+      "side": 1
+    },
+    {
+      "beat": 20,
+      "side": 0
+    },
+    {
+      "beat": 21,
+      "side": 0
+    },
+    {
+      "beat": 22,
+      "side": 1
+    },
+    {
+      "beat": 23,
+      "side": 1
+    },
+    {
+      "beat": 24,
+      "side": 1
+    },
+    {
+      "beat": 25,
+      "side": 0
+    },
+    {
+      "beat": 26,
+      "side": 1
+    },
+    {
+      "beat": 27,
+      "side": 0
+    },
+    {
+      "beat": 28,
+      "side": 0
+    },
+    {
+      "beat": 29,
+      "side": 1
+    },
+    {
+      "beat": 30,
+      "side": 1
+    },
+    {
+      "beat": 31,
+      "side": 0
+    },
+    {
+      "beat": 32,
+      "side": 1
+    },
+    {
+      "beat": 33,
+      "side": 1
+    },
+    {
+      "beat": 34,
+      "side": 0
+    },
+    {
+      "beat": 35,
+      "side": 0
+    }
+  ]
+}
