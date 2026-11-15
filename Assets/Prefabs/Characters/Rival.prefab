@@ -94,6 +94,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: fd6beeb0797ed1646948d8d6110f2ba9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 716501215070399987}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: fd6beeb0797ed1646948d8d6110f2ba9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8868280792063513592}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: fd6beeb0797ed1646948d8d6110f2ba9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 155087337800200831}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: fd6beeb0797ed1646948d8d6110f2ba9, type: 3}
 --- !u!1 &9085769746451105850 stripped
 GameObject:
@@ -134,3 +140,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8868280792063513592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085769746451105850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18a317052867044eabebcbd497e4505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 716501215070399987}
+  reactToPlayer: 0
+--- !u!114 &155087337800200831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9085769746451105850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5cc74de4e73d24fac24088257b09b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dancer: {fileID: 8868280792063513592}
+  everyBeats: 2
+  perfectEvery: 3
