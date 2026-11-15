@@ -48,10 +48,20 @@ namespace DanceTap.EditorTools
             crowd.transform.localPosition = new Vector3(0f, -ScreenH * 0.5f - 0.05f, 0f);
 
             var spots = Child(bg, "Spotlights");
-            var beamL = Sprite(Child(spots, "Beam_L"), Fx + "fx_beam.png", mBeam, -80, new Color(Pink.r, Pink.g, Pink.b, 0.18f));
-            beamL.transform.localPosition = new Vector3(-4.7f, 9.9f, 0f); beamL.transform.localRotation = Quaternion.Euler(0, 0, 11f); beamL.transform.localScale = new Vector3(5f, 13.5f, 1f);
-            var beamR = Sprite(Child(spots, "Beam_R"), Fx + "fx_beam.png", mBeam, -80, new Color(Blue.r, Blue.g, Blue.b, 0.18f));
-            beamR.transform.localPosition = new Vector3(4.7f, 9.9f, 0f); beamR.transform.localRotation = Quaternion.Euler(0, 0, -11f); beamR.transform.localScale = new Vector3(5f, 13.5f, 1f);
+            // beams: created once with defaults, after that their placement/colour belong to you (never overwritten)
+            SpriteRenderer beamL, beamR;
+            if (spots.transform.Find("Beam_L") == null)
+            {
+                beamL = Sprite(Child(spots, "Beam_L"), Fx + "fx_beam.png", mBeam, -80, new Color(Pink.r, Pink.g, Pink.b, 0.18f));
+                beamL.transform.localPosition = new Vector3(-4.7f, 9.9f, 0f); beamL.transform.localRotation = Quaternion.Euler(0, 0, 11f); beamL.transform.localScale = new Vector3(5f, 13.5f, 1f);
+            }
+            else beamL = spots.transform.Find("Beam_L").GetComponent<SpriteRenderer>();
+            if (spots.transform.Find("Beam_R") == null)
+            {
+                beamR = Sprite(Child(spots, "Beam_R"), Fx + "fx_beam.png", mBeam, -80, new Color(Blue.r, Blue.g, Blue.b, 0.18f));
+                beamR.transform.localPosition = new Vector3(4.7f, 9.9f, 0f); beamR.transform.localRotation = Quaternion.Euler(0, 0, -11f); beamR.transform.localScale = new Vector3(5f, 13.5f, 1f);
+            }
+            else beamR = spots.transform.Find("Beam_R").GetComponent<SpriteRenderer>();
             var clock = Object.FindFirstObjectByType<BeatClock>();
             var sway = Get<SpotlightSway>(spots);
             Set(sway, "clock", clock);
@@ -96,7 +106,7 @@ namespace DanceTap.EditorTools
             {
                 var logoGo = Child(end.gameObject, "Logo");
                 var rt = logoGo.GetComponent<RectTransform>(); if (rt == null) rt = logoGo.AddComponent<RectTransform>();
-                rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f); rt.anchoredPosition = new Vector2(0, 700); rt.sizeDelta = new Vector2(820, 184); rt.localScale = Vector3.one;
+                rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f); rt.anchoredPosition = new Vector2(0, 560); rt.sizeDelta = new Vector2(820, 184); rt.localScale = Vector3.one;
                 var img = Get<Image>(logoGo); img.sprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/UI/ui_logo.png"); img.raycastTarget = false; img.preserveAspect = true;
                 logoGo.transform.SetSiblingIndex(0);
                 end.GetComponent<Image>().color = new Color(0.06f, 0.02f, 0.12f, 0.72f);

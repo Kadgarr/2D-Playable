@@ -107,16 +107,16 @@ namespace DanceTap.EditorTools
 
             var endRt = Rct(ui, "EndCard", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             var endBg = Get<Image>(endRt.gameObject); endBg.color = new Color(0.08f, 0.03f, 0.16f, 0.82f);
-            var endTitle = Txt(endRt, "Title", font, "YOU WON THE BATTLE!", 80, new Vector2(0.5f, 0.5f), new Vector2(0, 420), new Vector2(980, 220), Color.white);
-            var endScore = Txt(endRt, "Score", font, "SCORE 0", 60, new Vector2(0.5f, 0.5f), new Vector2(0, 260), new Vector2(900, 90), Blue);
-            var storeRt = Rct(endRt, "StoreButton", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, -520), new Vector2(640, 170));
+            var endTitle = Txt(endRt, "Title", font, "YOU WON THE BATTLE!", 80, new Vector2(0.5f, 0.5f), new Vector2(0, 340), new Vector2(980, 220), Color.white);
+            var endScore = Txt(endRt, "Score", font, "SCORE 0", 60, new Vector2(0.5f, 0.5f), new Vector2(0, 210), new Vector2(900, 90), Blue);
+            var storeRt = Rct(endRt, "StoreButton", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, -40), new Vector2(640, 170));
             var storeImg = Get<Image>(storeRt.gameObject); storeImg.sprite = Spr("ui_round.png"); storeImg.type = Image.Type.Sliced; storeImg.color = new Color(0.3f, 0.85f, 0.35f);
             var storeBtn = Get<Button>(storeRt.gameObject);
             Txt(storeRt, "Label", font, "GO TO STORE", 64, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(620, 160), Color.white).raycastTarget = false;
             var endView = Get<EndCardView>(endRt.gameObject);
             Set(endView, "title", endTitle); Set(endView, "finalScore", endScore);
             ClearListeners(storeBtn.onClick); UnityEventTools.AddPersistentListener(storeBtn.onClick, endView.OnStoreButton);
-            var replayRt = Rct(endRt, "ReplayButton", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, -730), new Vector2(420, 120));
+            var replayRt = Rct(endRt, "ReplayButton", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, -230), new Vector2(420, 120));
             var replayImg = Get<Image>(replayRt.gameObject); replayImg.sprite = Spr("ui_round.png"); replayImg.type = Image.Type.Sliced; replayImg.color = new Color(1f, 1f, 1f, 0.18f);
             var replayBtn = Get<Button>(replayRt.gameObject);
             Txt(replayRt, "Label", font, "PLAY AGAIN", 48, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(400, 110), Color.white).raycastTarget = false;

@@ -19,6 +19,8 @@ namespace DanceTap
         RectTransform gradeRect;
         float popup;
         float superShown, superTarget;
+        RectTransform superRect;
+        float superFullWidth, superMinWidth;
 
         void Awake()
         {
@@ -27,7 +29,10 @@ namespace DanceTap
             comboText.SetText("COMBO {0}", 0);
             scoreText.SetText("{0}", 0);
             multiplierText.SetText("x{0}", 1);
-            superFill.fillAmount = 0f;
+            superRect = superFill.rectTransform;
+            superFullWidth = superRect.sizeDelta.x;
+            superMinWidth = superRect.sizeDelta.y;   // a sliced pill never gets narrower than it is tall
+            SetSuper(0f);
         }
 
         void OnEnable()
@@ -63,13 +68,21 @@ namespace DanceTap
             popup = popupTime;
         }
 
+        /// <summary>Filled image: fillAmount. Sliced pill (rounded ends): width, so the ends stay round.</summary>
+        void SetSuper(float v)
+        {
+            if (superFill.type != Image.Type.Sliced) { superFill.fillAmount = v; return; }
+            superFill.enabled = v > 0.001f;
+            var sd = superRect.sizeDelta; sd.x = Mathf.Lerp(superMinWidth, superFullWidth, v); superRect.sizeDelta = sd;
+        }
+
         public void Tick(double songTime, double songBeat)
         {
             float dt = Time.deltaTime;
             if (!Mathf.Approximately(superShown, superTarget))
             {
                 superShown = Mathf.MoveTowards(superShown, superTarget, dt * 1.5f);
-                superFill.fillAmount = superShown;
+                SetSuper(superShown);
             }
 
             if (popup <= 0f) return;
