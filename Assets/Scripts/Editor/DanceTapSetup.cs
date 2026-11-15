@@ -234,10 +234,10 @@ namespace DanceTap.EditorTools
             {
                 var ti = AssetImporter.GetAtPath(ArtUI + n) as TextureImporter;
                 if (ti == null) continue;
-                bool changed = ti.textureType != TextureImporterType.Sprite || ti.mipmapEnabled || ti.maxTextureSize != 256;
+                bool changed = ti.textureType != TextureImporterType.Sprite || ti.mipmapEnabled;
                 ti.textureType = TextureImporterType.Sprite; ti.spriteImportMode = SpriteImportMode.Single;
-                ti.mipmapEnabled = false; ti.maxTextureSize = n == "ui_round.png" || n == "ui_hand.png" ? 128 : 256;
-                ti.alphaIsTransparency = true; ti.spritePixelsPerUnit = n == "ui_round.png" || n == "ui_hand.png" ? 100 : 256;
+                ti.mipmapEnabled = false; ti.maxTextureSize = n == "ui_round.png" || n == "ui_hand.png" || n == "ui_glow.png" ? 128 : 256;
+                ti.alphaIsTransparency = true; ti.spritePixelsPerUnit = n == "ui_round.png" || n == "ui_hand.png" ? 100 : 256;   // ppu follows the source size; max size 128 only lowers the glow's resolution
                 if (n == "ui_round.png") { var mts = new TextureImporterSettings(); ti.ReadTextureSettings(mts); if (mts.spriteMeshType != SpriteMeshType.FullRect) { mts.spriteMeshType = SpriteMeshType.FullRect; ti.SetTextureSettings(mts); changed = true; } if (ti.spriteBorder != new Vector4(44, 44, 44, 44)) changed = true; ti.spriteBorder = new Vector4(44, 44, 44, 44); }
                 if (changed) ti.SaveAndReimport();
             }
