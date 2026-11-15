@@ -14,7 +14,12 @@ namespace DanceTap
         [SerializeField] Judge judge;
         [Tooltip("Root of the hand + label (UI)")] [SerializeField] RectTransform handRoot;
         [SerializeField] TMP_Text label;
-        [Tooltip("Hand position over the left / right target (canvas units, 1080x1920)")]
+        [Tooltip("World targets the hand points at (any screen aspect). Empty = fixed canvas positions below")]
+        [SerializeField] Transform leftTarget, rightTarget;
+        [SerializeField] Camera worldCamera;
+        [Tooltip("Hand offset from the target centre (canvas units)")]
+        [SerializeField] Vector2 handOffset = new Vector2(40, -80);
+        [Tooltip("Fallback hand position over the left / right target (canvas units, 1080x1920)")]
         [SerializeField] Vector2 leftPos = new Vector2(-230, -820), rightPos = new Vector2(310, -820);
         [SerializeField] Vector2 introLabelPos = new Vector2(0, 520), tapLabelPos = new Vector2(-40, 330);
         [SerializeField] string introText = "TAP TO THE BEAT!", tapText = "TAP!";
@@ -22,8 +27,9 @@ namespace DanceTap
         Note[] notes;
         double[] times;
         bool[] done;   // already graded (an early tap inside the window) - never freeze on those
-        int next, waitingSide = -1;
-        bool on;
+        int next, waitingSide = -1, shownSide;
+        bool on, shownIntro;
+        RectTransform handParent;
 
         void Awake()
         {
@@ -31,12 +37,17 @@ namespace DanceTap
             times = new double[notes.Length];
             done = new bool[notes.Length];
             for (int i = 0; i < notes.Length; i++) times[i] = notes[i].beat * (60.0 / clock.Beatmap.bpm);
+            handParent = handRoot.parent as RectTransform;
+            if (worldCamera == null) worldCamera = Camera.main;
         }
 
-        void OnEnable() { clock.Register(this); GameEvents.Tap += OnTap; GameEvents.StateChanged += OnState; GameEvents.Hit += OnHit; }
-        void OnDisable() { clock.Unregister(this); GameEvents.Tap -= OnTap; GameEvents.StateChanged -= OnState; GameEvents.Hit -= OnHit; }
+        void OnEnable() { clock.Register(this); GameEvents.Tap += OnTap; GameEvents.StateChanged += OnState; GameEvents.Hit += OnHit; CameraFitter.ViewChanged += OnViewChanged; }
+        void OnDisable() { clock.Unregister(this); GameEvents.Tap -= OnTap; GameEvents.StateChanged -= OnState; GameEvents.Hit -= OnHit; CameraFitter.ViewChanged -= OnViewChanged; }
 
         void OnHit(HitGrade g, int side, int note) => done[note] = true;
+
+        // screen resized while the hand is visible: follow the target again
+        void OnViewChanged(Camera _) { if (handRoot.gameObject.activeSelf) Place(shownSide, shownIntro); }
 
         void OnState(GameStateId s)
         {
@@ -69,11 +80,28 @@ namespace DanceTap
 
         void Show(int side, string text, bool intro)
         {
-            var pos = side == 0 ? leftPos : rightPos;
-            handRoot.anchoredPosition = pos;
             label.SetText(text);
-            label.rectTransform.anchoredPosition = intro ? introLabelPos - pos : tapLabelPos;
+            Place(side, intro);
             handRoot.gameObject.SetActive(true);
+        }
+
+        void Place(int side, bool intro)
+        {
+            shownSide = side;
+            shownIntro = intro;
+            var pos = HandPosition(side);
+            handRoot.anchoredPosition = pos;
+            label.rectTransform.anchoredPosition = intro ? introLabelPos - pos : tapLabelPos;
+        }
+
+        Vector2 HandPosition(int side)
+        {
+            var target = side == 0 ? leftTarget : rightTarget;
+            if (target == null || worldCamera == null || handParent == null) return side == 0 ? leftPos : rightPos;
+            Vector2 screen = worldCamera.WorldToScreenPoint(target.position);
+            Vector2 local;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(handParent, screen, null, out local);  // overlay canvas: no camera
+            return local + handOffset;
         }
     }
 }
