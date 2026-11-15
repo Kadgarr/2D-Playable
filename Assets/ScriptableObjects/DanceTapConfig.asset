@@ -21,7 +21,7 @@ MonoBehaviour:
     goodMs: 220
     forgiving: 0
   leadBeats: 2
-  laneHeight: 5.8
+  laneHeight: 5.2
   freezeNotes: 4
   ringStartScale: 2.6
   perfectScore: 300
