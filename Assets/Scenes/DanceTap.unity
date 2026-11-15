@@ -1277,13 +1277,7 @@ MonoBehaviour:
   startAfter: 1.5
   goodEvery: 3
   skipEvery: 7
-  shotBeats:
-  - -1
-  - 3
-  - 4
-  - 10
-  - 23.5
-  - 31.7
+  shotBeats: []
   shotFolder: C:\Users\justr\Downloads\DanceTap_Rig\playtest4
 --- !u!1 &473489131
 GameObject:
