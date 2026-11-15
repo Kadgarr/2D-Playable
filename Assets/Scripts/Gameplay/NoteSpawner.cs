@@ -31,6 +31,14 @@ namespace DanceTap
 
         public void SetSpawning(bool on) => spawning = on;
 
+        /// <summary>Hide every note still on the lanes (fail / finale: the round is over).</summary>
+        public void ClearAll()
+        {
+            for (int i = 0; i < leftPool.Length; i++) leftPool[i].Hide();
+            for (int i = 0; i < rightPool.Length; i++) rightPool[i].Hide();
+            for (int i = 0; i < ringOfNote.Length; i++) ringOfNote[i] = -1;
+        }
+
         void Awake()
         {
             notes = clock.Beatmap.notes;

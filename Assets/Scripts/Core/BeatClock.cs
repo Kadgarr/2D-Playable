@@ -65,6 +65,8 @@ namespace DanceTap
             Paused = true;
             pauseDsp = AudioSettings.dspTime;
             frozenTime = holdSongTime;
+            SongTime = holdSongTime;                    // valid right away: a tap in this same frame is judged on the frozen time
+            SongBeat = holdSongTime / SecondsPerBeat;
             if (music != null) music.Pause();
         }
 

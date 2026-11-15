@@ -239,6 +239,7 @@ namespace DanceTap
             f.judge.SetActive(false);
             f.spawner.SetSpawning(false);
             f.hero.PlayFall();
+            f.spawner.ClearAll();
             f.rival.StopDancing();
             f.rivalDancer.PlayVictory();
             endBeat = (int)System.Math.Floor(f.clock.SongBeat) + f.failToEndCardBeats;

@@ -64,25 +64,24 @@ namespace DanceTap.EditorTools
                 t.position = new Vector3(t.position.x, -1.4f, 0f);
             }
 
-            // ---------- VFX ----------
+            // ---------- VFX: always prefabs (Assets/Prefabs/VFX). Existing prefabs are never rebuilt - edit them freely ----------
             var vfx = Find("VFX");
             var lanes = Find("Gameplay/NoteLanes").transform;
-            var burstL = HitBurst(lanes.Find("Lane_L").gameObject, Pink, mParticles);
-            var burstR = HitBurst(lanes.Find("Lane_R").gameObject, Blue, mParticles);
+            var burstL = LaneBurst(lanes.Find("Lane_L").gameObject, Pink, mParticles);
+            var burstR = LaneBurst(lanes.Find("Lane_R").gameObject, Blue, mParticles);
 
             var heroX = Find("Gameplay/Hero").transform.position.x;
-            var perfect = Child(vfx, "PerfectBurst"); perfect.SetActive(true);
+            var perfect = VfxInstance(vfx, "PerfectBurst", go => PerfectSparkle(go, mParticles));
+            perfect.SetActive(true);
             perfect.transform.position = new Vector3(heroX, 2.9f, 0f);
-            var sparkle = PerfectSparkle(perfect, mParticles);
+            var sparkle = perfect.GetComponent<ParticleSystem>();
 
-            var confetti = Child(vfx, "ComboConfetti");
+            var confetti = VfxInstance(vfx, "ComboConfetti", go => Confetti(go, mParticles));
             confetti.transform.position = new Vector3(0f, 10.4f, 0f);
-            Confetti(confetti, mParticles);
             confetti.SetActive(false);
 
-            var super = Child(vfx, "SuperMoveFX");
+            var super = VfxInstance(vfx, "SuperMoveFX", go => SuperBurst(go, mParticles));
             super.transform.position = new Vector3(heroX, 2.9f, 0f);
-            SuperBurst(super, mParticles);
             super.SetActive(false);
 
             var hitFx = Get<HitFxView>(vfx);
@@ -109,11 +108,45 @@ namespace DanceTap.EditorTools
             Debug.Log("Dance Tap: stage and FX built.");
         }
 
+        const string PF = "Assets/Prefabs/VFX/";
+
+        /// <summary>Scene instance of a VFX prefab. Builds and saves the prefab only if it does not exist yet.</summary>
+        static GameObject VfxInstance(GameObject parent, string name, System.Action<GameObject> build)
+        {
+            System.IO.Directory.CreateDirectory(PF);
+            var path = PF + name + ".prefab";
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            var t = parent.transform.Find(name);
+            if (prefab == null)
+            {
+                var go = t != null ? t.gameObject : Child(parent, name);
+                build(go);
+                bool wasActive = go.activeSelf; go.SetActive(true);
+                PrefabUtility.SaveAsPrefabAssetAndConnect(go, path, InteractionMode.AutomatedAction);
+                go.SetActive(wasActive);
+                return go;
+            }
+            if (t != null && PrefabUtility.GetCorrespondingObjectFromSource(t.gameObject) == prefab) return t.gameObject;
+            if (t != null) Object.DestroyImmediate(t.gameObject);
+            var inst = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent.transform);
+            inst.name = name;
+            return inst;
+        }
+
+        /// <summary>HitBurst prefab under a lane; the lane colour is an instance override.</summary>
+        static ParticleSystem LaneBurst(GameObject lane, Color c, Material mat)
+        {
+            var go = VfxInstance(lane, "HitBurst", g => HitBurst(g, c, mat));
+            go.transform.localPosition = Vector3.zero;
+            var ps = go.GetComponent<ParticleSystem>();
+            var main = ps.main; main.startColor = new ParticleSystem.MinMaxGradient(c, Color.white);
+            return ps;
+        }
+
         // ---------------- particles ----------------
 
-        static ParticleSystem HitBurst(GameObject lane, Color c, Material mat)
+        static void HitBurst(GameObject go, Color c, Material mat)
         {
-            var go = Child(lane, "HitBurst"); go.transform.localPosition = Vector3.zero;
             var ps = PS(go, mat, 32);
             var main = ps.main;
             main.duration = 1f; main.loop = false; main.playOnAwake = false;
@@ -127,10 +160,9 @@ namespace DanceTap.EditorTools
             var sh = ps.shape; sh.enabled = true; sh.shapeType = ParticleSystemShapeType.Circle; sh.radius = 0.55f; sh.radiusThickness = 0f;
             Shrink(ps);
             Frames(ps, 0f, 2f);                                     // glow + star
-            return ps;
         }
 
-        static ParticleSystem PerfectSparkle(GameObject go, Material mat)
+        static void PerfectSparkle(GameObject go, Material mat)
         {
             var ps = PS(go, mat, 33);
             var main = ps.main;
@@ -145,7 +177,6 @@ namespace DanceTap.EditorTools
             var sh = ps.shape; sh.enabled = true; sh.shapeType = ParticleSystemShapeType.Circle; sh.radius = 1.7f; sh.radiusThickness = 0.3f;
             Shrink(ps);
             Frames(ps, 1f, 1f);                                     // stars
-            return ps;
         }
 
         static void Confetti(GameObject go, Material mat)

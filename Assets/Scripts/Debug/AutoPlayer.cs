@@ -46,8 +46,10 @@ namespace DanceTap.DebugTools
                 if (flow != null && next < flow.config.freezeNotes && !(clock.Paused && Time.unscaledTime - pausedAt > 0.8f)) break;   // tutorial freeze: tap like a human, after a moment
                 double offsetBeats = mode == Mode.Sloppy && goodEvery > 0 && next % goodEvery == 1 ? 0.25 : 0.0;   // 125 ms late
                 if (songBeat < n.beat + offsetBeats) break;
-                bool skip = mode == Mode.MissAll || (mode == Mode.Sloppy && skipEvery > 0 && next % skipEvery == skipEvery - 1);
+                bool frozenNote = flow != null && next < flow.config.freezeNotes;   // the tutorial waits for these - even a bad player taps them
+                bool skip = !frozenNote && (mode == Mode.MissAll || (mode == Mode.Sloppy && skipEvery > 0 && next % skipEvery == skipEvery - 1));
                 if (!skip) GameEvents.RaiseTap(n.side);
+                if (frozenNote) pausedAt = -1f;   // the next freeze waits again
                 next++;
             }
 
